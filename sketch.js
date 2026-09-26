@@ -45,17 +45,6 @@ function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
 
-    // Detector-related variables
-    const d1LeftBoundarie = 0;
-    const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
-    // let d1Color = isOverlapping(p1X, p1Width, d1PosX, detectorWidth) ||
-    //     isOverlapping(p2X, p2Width, d1PosX, detectorWidth) ? r.ColorAlpha(r.RED, 0.6) : r.WHITE;
-    // let d1Color = decideColor();
-
-    const d2LeftBoundarie = WIDTH / 2;
-    const d2RightBoundarie = WIDTH - detectorWidth;
-    let d2Color;
-
     // Particle-related variables
     const pColor = r.SKYBLUE;
     const p1X = WIDTH / 3;
@@ -64,16 +53,25 @@ function draw() {
     const p2X = WIDTH * (2 / 3);
     const p2Width = 20;
 
+    // Detector-related variables
+    const d1LeftBoundarie = 0;
+    const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
+    let d1Color = geometry.isOverlapping(d1PosX, detectorWidth, p1X, p1Width);
+
+    const d2LeftBoundarie = WIDTH / 2;
+    const d2RightBoundarie = WIDTH - detectorWidth;
+    let d2Color = geometry.isOverlapping(d2PosX, detectorWidth, p2X, p2Width);
+
     // Particle Fields
     drawParticle(p1X, detectorAndParticlePosY, p1Width, detectorAndParticleHeight, pColor);
 
     drawParticle(p2X, detectorAndParticlePosY, p2Width, detectorAndParticleHeight, pColor);
 
     // Particle Detectors
-    drawDetector(d1PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
+    drawDetector(d1PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d1Color);
     d1Speed = geometry.handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
 
-    drawDetector(d2PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
+    drawDetector(d2PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d2Color);
     d2Speed = geometry.handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
 
     r.EndDrawing()

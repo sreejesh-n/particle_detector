@@ -9,7 +9,7 @@ const detectorAndParticlePosY = 0;
 const detectorAndParticleHeight = HEIGHT;
 const detectorWidth = 80;
 let detectorPosX = 0;
-let detectorSpeed = 4;
+let detectorSpeed = 3;
 
 function running() {
     return !r.WindowShouldClose();
@@ -57,12 +57,19 @@ function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
 
-    const particleX = WIDTH / 3;
-    const particleWidth = 150;
-    const particleColor = r.SKYBLUE;
-    let detectorColor = isOverlapping(particleX, particleWidth, detectorPosX, detectorWidth) ? r.RED : r.WHITE;
+    const pColor = r.SKYBLUE;
+    const p1X = WIDTH / 3;
+    const p1Width = 150;
 
-    drawParticle(particleX, detectorAndParticlePosY, particleWidth, detectorAndParticleHeight, particleColor);
+    const p2X = WIDTH * (2 / 3);
+    const p2Width = 20;
+
+    let detectorColor = isOverlapping(p1X, p1Width, detectorPosX, detectorWidth) ||
+        isOverlapping(p2X, p2Width, detectorPosX, detectorWidth) ? r.ColorAlpha(r.RED, 0.6) : r.WHITE;
+
+    drawParticle(p1X, detectorAndParticlePosY, p1Width, detectorAndParticleHeight, pColor);
+
+    drawParticle(p2X, detectorAndParticlePosY, p2Width, detectorAndParticleHeight, pColor);
 
     drawDetector(detectorPosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, detectorColor);
 

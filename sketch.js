@@ -41,6 +41,13 @@ function drawParticle(x, y, width, height, color) {
     drawRange(x, y, width, height, color);
 }
 
+function decideColor(dposX, dWidth, p1X, p1Width, p2X, p2Width) {
+    const isP1Overlapping = geometry.isOverlapping(dposX, dWidth, p1X, p1Width);
+    const isP2Overlapping = geometry.isOverlapping(dposX, dWidth, p2X, p2Width);
+
+    return isP1Overlapping || isP2Overlapping ? r.RED : r.WHITE;
+}
+
 function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
@@ -48,7 +55,7 @@ function draw() {
     // Particle-related variables
     const pColor = r.SKYBLUE;
     const p1X = WIDTH / 3;
-    const p1Width = 150;
+    const p1Width = 200;
 
     const p2X = WIDTH * (2 / 3);
     const p2Width = 20;
@@ -56,11 +63,11 @@ function draw() {
     // Detector-related variables
     const d1LeftBoundarie = 0;
     const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
-    let d1Color = geometry.isOverlapping(d1PosX, detectorWidth, p1X, p1Width);
+    let d1Color = decideColor(d1PosX, detectorWidth, p1X, p1Width, p2X, p2Width);
 
     const d2LeftBoundarie = WIDTH / 2;
     const d2RightBoundarie = WIDTH - detectorWidth;
-    let d2Color = geometry.isOverlapping(d2PosX, detectorWidth, p2X, p2Width);
+    let d2Color = decideColor(d2PosX, detectorWidth, p1X, p1Width, p2X, p2Width);
 
     // Particle Fields
     drawParticle(p1X, detectorAndParticlePosY, p1Width, detectorAndParticleHeight, pColor);

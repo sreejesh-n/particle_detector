@@ -1,3 +1,4 @@
+const r = require("raylib");
 const math = require("./math");
 const geometry = require("./geometry");
 
@@ -11,14 +12,23 @@ function handleDetectorEdgeBounce(position, leftBoundary, rightBoundary, speed) 
     return speed;
 }
 
-function isParticleDetected(detectorPosition, detectorSize, particle1Pos, particle1Size, particle2Pos, particle2Size) {
+function getDetectorColor(
+    detectorPosition,
+    detectorSize,
+    particle1Pos,
+    particle1Size,
+    particle2Pos,
+    particle2Size
+) {
     const isP1Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle1Pos, particle1Size);
     const isP2Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle2Pos, particle2Size);
 
-    return isP1Overlapping || isP2Overlapping;
+    const detectorColor = isP1Overlapping || isP2Overlapping ? r.RED : r.WHITE;
+
+    return detectorColor;
 }
 
 module.exports = {
     handleDetectorEdgeBounce,
-    isParticleDetected,
+    getDetectorColor,
 }

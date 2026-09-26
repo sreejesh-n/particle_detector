@@ -5,11 +5,13 @@ const WIDTH = 1200;
 const HEIGHT = 800;
 const FPS = 60;
 
+const detectorAndParticlePosY = 0;
+const detectorAndParticleHeight = HEIGHT;
 const detectorWidth = 80;
-const detectorHeight = HEIGHT;
-const detectorPosY = 0;
 let detectorPosX = 0;
 let detectorSpeed = 4;
+let detectorColor = r.WHITE;
+
 
 function running() {
     return !r.WindowShouldClose();
@@ -46,7 +48,13 @@ function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
 
-    drawDetector(detectorPosX, detectorPosY, detectorWidth, detectorHeight, r.WHITE);
+    const particleX = WIDTH / 3;
+    const particleWidth = 150;
+    const particleColor = r.SKYBLUE;
+
+    drawRange(particleX, detectorAndParticlePosY, particleWidth, detectorAndParticleHeight, particleColor);
+
+    drawDetector(detectorPosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
 
     r.EndDrawing()
 }

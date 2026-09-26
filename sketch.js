@@ -5,11 +5,11 @@ const WIDTH = 1200;
 const HEIGHT = 800;
 const FPS = 60;
 
-let d1PosX = 0;
-let d1Speed = 3;
+let hDetector1X = 0;
+let hD1Speed = 3;
 
-let d2PosX = WIDTH / 2;
-let d2Speed = 4;
+let hDetector2X = WIDTH / 2;
+let hD2Speed = 4;
 
 function running() {
     return !r.WindowShouldClose();
@@ -21,8 +21,8 @@ function setup() {
 }
 
 function update() {
-    d1PosX += d1Speed;
-    d2PosX += d2Speed;
+    hDetector1X += hD1Speed;
+    hDetector2X += hD2Speed;
 }
 
 function drawRange(x, y, width, height, color) {
@@ -42,39 +42,40 @@ function draw() {
     r.ClearBackground(r.BLACK);
 
     // Common properties
-    const detectorAndParticlePosY = 0;
-    const detectorAndParticleHeight = HEIGHT;
-    const detectorWidth = 70;
+    const hDetectorAndParticlePosY = 0;
+    const hDetectorAndParticleHeight = HEIGHT;
 
     // Particle-related properties
-    const p1X = WIDTH / 3;
-    const p1Width = 200;
+    const hP1X = WIDTH / 3;
+    const hP1Width = 200;
 
-    const p2X = WIDTH * (2 / 3);
-    const p2Width = 20;
+    const hP2X = WIDTH * (2 / 3);
+    const hP2Width = 20;
 
     const pColor = r.SKYBLUE;
 
     // Detector-related properties
-    const d1LeftBoundarie = 0;
-    const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
-    let d1Color = utils.isParticleDetected(d1PosX, detectorWidth, p1X, p1Width, p2X, p2Width) ? r.RED : r.WHITE;
+    const detectorWidth = 70;
 
-    const d2LeftBoundarie = WIDTH / 2;
-    const d2RightBoundarie = WIDTH - detectorWidth;
-    let d2Color = utils.isParticleDetected(d2PosX, detectorWidth, p1X, p1Width, p2X, p2Width) ? r.RED : r.WHITE;
+    const hD1LeftBoundarie = 0;
+    const hD1RightBoundarie = (WIDTH / 2) - detectorWidth;
+    let hD1Color = utils.isParticleDetected(hDetector1X, detectorWidth, hP1X, hP1Width, hP2X, hP2Width) ? r.RED : r.WHITE;
+
+    const hD2LeftBoundarie = WIDTH / 2;
+    const hD2RightBoundarie = WIDTH - detectorWidth;
+    let hD2Color = utils.isParticleDetected(hDetector2X, detectorWidth, hP1X, hP1Width, hP2X, hP2Width) ? r.RED : r.WHITE;
 
     // Particle Fields
-    drawParticle(p1X, detectorAndParticlePosY, p1Width, detectorAndParticleHeight, pColor);
+    drawParticle(hP1X, hDetectorAndParticlePosY, hP1Width, hDetectorAndParticleHeight, pColor);
 
-    drawParticle(p2X, detectorAndParticlePosY, p2Width, detectorAndParticleHeight, pColor);
+    drawParticle(hP2X, hDetectorAndParticlePosY, hP2Width, hDetectorAndParticleHeight, pColor);
 
     // Particle Detectors
-    drawDetector(d1PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d1Color);
-    d1Speed = utils.handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
+    drawDetector(hDetector1X, hDetectorAndParticlePosY, detectorWidth, hDetectorAndParticleHeight, hD1Color);
+    hD1Speed = utils.handleDetectorEdgeBounce(hDetector1X, hD1LeftBoundarie, hD1RightBoundarie, hD1Speed);
 
-    drawDetector(d2PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d2Color);
-    d2Speed = utils.handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
+    drawDetector(hDetector2X, hDetectorAndParticlePosY, detectorWidth, hDetectorAndParticleHeight, hD2Color);
+    hD2Speed = utils.handleDetectorEdgeBounce(hDetector2X, hD2LeftBoundarie, hD2RightBoundarie, hD2Speed);
 
     r.EndDrawing()
 }

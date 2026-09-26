@@ -1,19 +1,19 @@
 const math = require("./math");
 const geometry = require("./geometry");
 
-function handleDetectorEdgeBounce(posX, leftBoundary, rightBoundary, speed) {
-    if (posX >= rightBoundary) {
+function handleDetectorEdgeBounce(position, leftBoundary, rightBoundary, speed) {
+    if (position >= rightBoundary) {
         return -speed;
     }
-    if (posX <= leftBoundary) {
+    if (position <= leftBoundary) {
         return math.absolute(speed);
     }
     return speed;
 }
 
-function isParticleDetected(dposX, dWidth, p1X, p1Width, p2X, p2Width) {
-    const isP1Overlapping = geometry.isOverlapping(dposX, dWidth, p1X, p1Width);
-    const isP2Overlapping = geometry.isOverlapping(dposX, dWidth, p2X, p2Width);
+function isParticleDetected(detectorPosition, detectorSize, particle1Pos, particle1Size, particle2Pos, particle2Size) {
+    const isP1Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle1Pos, particle1Size);
+    const isP2Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle2Pos, particle2Size);
 
     return isP1Overlapping || isP2Overlapping;
 }

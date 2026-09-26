@@ -1,17 +1,5 @@
-const math = require("./math");
-
 function calcOffset(outer, inner) {
     return (outer - inner) / 2;
-}
-
-function handleDetectorEdgeBounce(posX, leftBoundary, rightBoundary, speed) {
-    if (posX >= rightBoundary) {
-        return -speed;
-    }
-    if (posX <= leftBoundary) {
-        return math.absolute(speed);
-    }
-    return speed;
 }
 
 function isOverlapping(range1X, range1Width, range2X, range2Width) {
@@ -23,6 +11,5 @@ function isOverlapping(range1X, range1Width, range2X, range2Width) {
 
 module.exports = {
     calcOffset,
-    handleDetectorEdgeBounce,
     isOverlapping,
 };

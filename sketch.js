@@ -1,13 +1,9 @@
 const r = require("raylib");
-const geometry = require("./geometry");
+const utils = require("./detectorUtils");
 
 const WIDTH = 1200;
 const HEIGHT = 800;
 const FPS = 60;
-
-const detectorAndParticlePosY = 0;
-const detectorAndParticleHeight = HEIGHT;
-const detectorWidth = 70;
 
 let d1PosX = 0;
 let d1Speed = 3;
@@ -41,34 +37,32 @@ function drawParticle(x, y, width, height, color) {
     drawRange(x, y, width, height, color);
 }
 
-function decideColor(dposX, dWidth, p1X, p1Width, p2X, p2Width) {
-    const isP1Overlapping = geometry.isOverlapping(dposX, dWidth, p1X, p1Width);
-    const isP2Overlapping = geometry.isOverlapping(dposX, dWidth, p2X, p2Width);
-
-    return isP1Overlapping || isP2Overlapping ? r.RED : r.WHITE;
-}
-
 function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
 
-    // Particle-related variables
-    const pColor = r.SKYBLUE;
+    // Common properties
+    const detectorAndParticlePosY = 0;
+    const detectorAndParticleHeight = HEIGHT;
+    const detectorWidth = 70;
 
+    // Particle-related properties
     const p1X = WIDTH / 3;
     const p1Width = 200;
 
     const p2X = WIDTH * (2 / 3);
     const p2Width = 20;
 
-    // Detector-related variables
+    const pColor = r.SKYBLUE;
+
+    // Detector-related properties
     const d1LeftBoundarie = 0;
     const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
-    let d1Color = decideColor(d1PosX, detectorWidth, p1X, p1Width, p2X, p2Width);
+    let d1Color = utils.isParticleDetected(d1PosX, detectorWidth, p1X, p1Width, p2X, p2Width) ? r.RED : r.WHITE;
 
     const d2LeftBoundarie = WIDTH / 2;
     const d2RightBoundarie = WIDTH - detectorWidth;
-    let d2Color = decideColor(d2PosX, detectorWidth, p1X, p1Width, p2X, p2Width);
+    let d2Color = utils.isParticleDetected(d2PosX, detectorWidth, p1X, p1Width, p2X, p2Width) ? r.RED : r.WHITE;
 
     // Particle Fields
     drawParticle(p1X, detectorAndParticlePosY, p1Width, detectorAndParticleHeight, pColor);
@@ -77,10 +71,10 @@ function draw() {
 
     // Particle Detectors
     drawDetector(d1PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d1Color);
-    d1Speed = geometry.handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
+    d1Speed = utils.handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
 
     drawDetector(d2PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, d2Color);
-    d2Speed = geometry.handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
+    d2Speed = utils.handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
 
     r.EndDrawing()
 }

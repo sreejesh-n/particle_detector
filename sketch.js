@@ -1,5 +1,5 @@
 const r = require("raylib");
-const math = require("./math");
+const geometry = require("./geometry");
 
 const WIDTH = 1200;
 const HEIGHT = 800;
@@ -22,23 +22,6 @@ function running() {
 function setup() {
     r.InitWindow(WIDTH, HEIGHT, "Particle Detector");
     r.SetTargetFPS(FPS);
-}
-
-function handleDetectorEdgeBounce(posX, leftBoundary, rightBoundary, speed) {
-    if (posX >= rightBoundary) {
-        return -speed;
-    }
-    if (posX <= leftBoundary) {
-        return math.absolute(speed);
-    }
-    return speed;
-}
-
-function isOverlapping(range1X, range1Width, range2X, range2Width) {
-    const range1EndX = range1X + range1Width;
-    const range2EndX = range2X + range2Width;
-
-    return range1EndX >= range2X && range1X <= range2EndX;
 }
 
 function update() {
@@ -67,6 +50,7 @@ function draw() {
     const d1RightBoundarie = (WIDTH / 2) - detectorWidth;
     // let d1Color = isOverlapping(p1X, p1Width, d1PosX, detectorWidth) ||
     //     isOverlapping(p2X, p2Width, d1PosX, detectorWidth) ? r.ColorAlpha(r.RED, 0.6) : r.WHITE;
+    // let d1Color = decideColor();
 
     const d2LeftBoundarie = WIDTH / 2;
     const d2RightBoundarie = WIDTH - detectorWidth;
@@ -87,10 +71,10 @@ function draw() {
 
     // Particle Detectors
     drawDetector(d1PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
-    d1Speed = handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
+    d1Speed = geometry.handleDetectorEdgeBounce(d1PosX, d1LeftBoundarie, d1RightBoundarie, d1Speed);
 
     drawDetector(d2PosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
-    d2Speed = handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
+    d2Speed = geometry.handleDetectorEdgeBounce(d2PosX, d2LeftBoundarie, d2RightBoundarie, d2Speed);
 
     r.EndDrawing()
 }

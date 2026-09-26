@@ -54,6 +54,7 @@ function draw() {
 
     // Particle-related variables
     const pColor = r.SKYBLUE;
+
     const p1X = WIDTH / 3;
     const p1Width = 200;
 

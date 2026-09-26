@@ -10,8 +10,6 @@ const detectorAndParticleHeight = HEIGHT;
 const detectorWidth = 80;
 let detectorPosX = 0;
 let detectorSpeed = 4;
-let detectorColor = r.WHITE;
-
 
 function running() {
     return !r.WindowShouldClose();
@@ -31,6 +29,13 @@ function handleDetectorEdgeBounce() {
     }
 }
 
+function isOverlapping(range1X, range1Width, range2X, range2Width) {
+    const range1EndX = range1X + range1Width;
+    const range2EndX = range2X + range2Width;
+
+    return range1EndX >= range2X && range1X <= range2EndX;
+}
+
 function update() {
     handleDetectorEdgeBounce();
     detectorPosX += detectorSpeed;
@@ -44,6 +49,10 @@ function drawDetector(x, y, width, height, color) {
     drawRange(x, y, width, height, color);
 }
 
+function drawParticle(x, y, width, height, color) {
+    drawRange(x, y, width, height, color);
+}
+
 function draw() {
     r.BeginDrawing()
     r.ClearBackground(r.BLACK);
@@ -51,10 +60,11 @@ function draw() {
     const particleX = WIDTH / 3;
     const particleWidth = 150;
     const particleColor = r.SKYBLUE;
+    let detectorColor = isOverlapping(particleX, particleWidth, detectorPosX, detectorWidth) ? r.RED : r.WHITE;
 
-    drawRange(particleX, detectorAndParticlePosY, particleWidth, detectorAndParticleHeight, particleColor);
+    drawParticle(particleX, detectorAndParticlePosY, particleWidth, detectorAndParticleHeight, particleColor);
 
-    drawDetector(detectorPosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, r.WHITE);
+    drawDetector(detectorPosX, detectorAndParticlePosY, detectorWidth, detectorAndParticleHeight, detectorColor);
 
     r.EndDrawing()
 }

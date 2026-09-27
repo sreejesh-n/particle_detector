@@ -112,6 +112,9 @@ function draw() {
     const vP1Y = HEIGHT / 3;
     const vP1Height = 30;
 
+    const vP2Y = vP1Y + 140;
+    const vP2Height = 150;
+
     const pColor = r.SKYBLUE;
 
     // Detector-related properties
@@ -133,9 +136,23 @@ function draw() {
         hP2Width,
     );
 
-    let vD1Color = utils.getDetectorColor(vDetector1Y, detectorSize, vP1Y, vP1Height);
+    let vD1Color = utils.getDetectorColor(
+        vDetector1Y,
+        detectorSize,
+        vP1Y,
+        vP1Height,
+        vP2Y,
+        vP2Height,
+    );
 
-    let vD2Color = utils.getDetectorColor(vDetector2Y, detectorSize, vP1Y, vP1Height);
+    let vD2Color = utils.getDetectorColor(
+        vDetector2Y,
+        detectorSize,
+        vP1Y,
+        vP1Height,
+        vP2Y,
+        vP2Height
+    );
 
     // Particle Fields
     drawParticle(
@@ -159,6 +176,14 @@ function draw() {
         vP1Y,
         vDetectorAndParticleWidth,
         vP1Height,
+        pColor,
+    );
+
+    drawParticle(
+        vDetectorAndParticlePosX,
+        vP2Y,
+        vDetectorAndParticleWidth,
+        vP2Height,
         pColor,
     );
 

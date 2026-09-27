@@ -118,7 +118,7 @@ function draw() {
     const pColor = r.SKYBLUE;
 
     // Detector-related properties
-    let hD1Color = utils.getDetectorColor(
+    const hD1Color = utils.getDetectorColor(
         hDetector1X,
         detectorSize,
         hP1X,
@@ -127,7 +127,7 @@ function draw() {
         hP2Width,
     );
 
-    let hD2Color = utils.getDetectorColor(
+    const hD2Color = utils.getDetectorColor(
         hDetector2X,
         detectorSize,
         hP1X,
@@ -136,7 +136,7 @@ function draw() {
         hP2Width,
     );
 
-    let vD1Color = utils.getDetectorColor(
+    const vD1Color = utils.getDetectorColor(
         vDetector1Y,
         detectorSize,
         vP1Y,
@@ -145,7 +145,7 @@ function draw() {
         vP2Height,
     );
 
-    let vD2Color = utils.getDetectorColor(
+    const vD2Color = utils.getDetectorColor(
         vDetector2Y,
         detectorSize,
         vP1Y,

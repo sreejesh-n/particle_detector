@@ -23,7 +23,7 @@ function getDetectorColor(
     const isP1Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle1Pos, particle1Size);
     const isP2Overlapping = geometry.isOverlapping(detectorPosition, detectorSize, particle2Pos, particle2Size);
 
-    const detectorColor = isP1Overlapping || isP2Overlapping ? r.RED : r.WHITE;
+    const detectorColor = isP1Overlapping || isP2Overlapping ? r.ColorAlpha(r.RED, 0.6) : r.ColorAlpha(r.GREEN, 0.4);
 
     return detectorColor;
 }

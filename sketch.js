@@ -2,7 +2,7 @@ const r = require("raylib");
 const utils = require("./detectorUtils");
 
 const WIDTH = 1200;
-const HEIGHT = 800;
+const HEIGHT = 1000;
 const FPS = 60;
 
 const detectorSize = 70;
@@ -16,6 +16,9 @@ let hD2Speed = 4;
 let vDetector1Y = 0;
 let vD1Speed = 3;
 
+let vDetector2Y = HEIGHT / 2;
+let vD2Speed = 4;
+
 function running() {
     return !r.WindowShouldClose();
 }
@@ -27,13 +30,16 @@ function setup() {
 
 function update() {
     const hD1LeftBoundarie = 0;
-    const hD1RightBoundarie = WIDTH / 2 - detectorSize;
+    const hD1RightBoundarie = (WIDTH / 2) - detectorSize;
 
     const hD2LeftBoundarie = WIDTH / 2;
     const hD2RightBoundarie = WIDTH - detectorSize;
 
-    const vD1LeftBoundarie = 0;
-    const vD1RightBoundarie = HEIGHT - detectorSize;
+    const vD1TopBoundarie = 0;
+    const vD1BottomBoundarie = (HEIGHT / 2) - detectorSize;
+
+    const vD2TopBoundarie = HEIGHT / 2;
+    const vD2BottomBoundarie = HEIGHT - detectorSize;
 
     hD1Speed = utils.handleDetectorEdgeBounce(
         hDetector1X,
@@ -56,12 +62,21 @@ function update() {
 
     vD1Speed = utils.handleDetectorEdgeBounce(
         vDetector1Y,
-        vD1LeftBoundarie,
-        vD1RightBoundarie,
+        vD1TopBoundarie,
+        vD1BottomBoundarie,
         vD1Speed,
     );
 
     vDetector1Y += vD1Speed;
+
+    vD2Speed = utils.handleDetectorEdgeBounce(
+        vDetector2Y,
+        vD2TopBoundarie,
+        vD2BottomBoundarie,
+        vD2Speed,
+    );
+
+    vDetector2Y += vD2Speed;
 }
 
 function drawRange(x, y, width, height, color) {
@@ -120,6 +135,8 @@ function draw() {
 
     let vD1Color = utils.getDetectorColor(vDetector1Y, detectorSize, vP1Y, vP1Height);
 
+    let vD2Color = utils.getDetectorColor(vDetector2Y, detectorSize, vP1Y, vP1Height);
+
     // Particle Fields
     drawParticle(
         hP1X,
@@ -168,6 +185,14 @@ function draw() {
         vDetectorAndParticleWidth,
         detectorSize,
         vD1Color,
+    );
+
+    drawDetector(
+        vDetectorAndParticlePosX,
+        vDetector2Y,
+        vDetectorAndParticleWidth,
+        detectorSize,
+        vD2Color,
     );
 
     r.EndDrawing();

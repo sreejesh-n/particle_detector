@@ -2,13 +2,11 @@ function calcOffset(outer, inner) {
     return (outer - inner) / 2;
 }
 
-function isOverlapping(range1Pos, range1Size, range2Pos, range2Size) {
-    const range1End = range1Pos + range1Size;
-    const range2End = range2Pos + range2Size;
+function isOverlapping(range1Start, range1Size, range2Start, range2Size) {
+    const range1End = range1Start + range1Size;
+    const range2End = range2Start + range2Size;
 
-    const rangesOverlap = range1End >= range2Pos && range1Pos <= range2End;
-
-    return rangesOverlap;
+    return !(range1End <= range2Start || range2End <= range1Start);
 }
 
 module.exports = {

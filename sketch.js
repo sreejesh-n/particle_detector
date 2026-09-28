@@ -1,86 +1,103 @@
 const r = require("raylib");
+
+const sp = require("./setupProperties");
 const utils = require("./detectorUtils");
 
-const WIDTH = 1200;
-const HEIGHT = 1000;
-const FPS = 60;
+const hd1 = require("./horizontalDetector01");
+const hd2 = require("./horizontalDetector02");
+const vd1 = require("./verticalDetector01");
+const vd2 = require("./verticalDetector02");
 
-const detectorSize = 70;
-
-let hDetector1X = 0;
-let hD1Velocity = 3;
-
-let hDetector2X = WIDTH / 2;
-let hD2Velocity = 4;
-
-let vDetector1Y = 0;
-let vD1Velocity = 3;
-
-let vDetector2Y = HEIGHT / 2;
-let vD2Velocity = 4;
+const p = require("./particles");
 
 function running() {
   return !r.WindowShouldClose();
 }
 
 function setup() {
-  r.InitWindow(WIDTH, HEIGHT, "Particle Detector");
-  r.SetTargetFPS(FPS);
   r.SetTraceLogLevel(r.LOG_NONE);
+  r.InitWindow(sp.WIDTH, sp.HEIGHT, "Particle Detector");
+  r.SetTargetFPS(sp.FPS);
 }
 
 function update() {
-  const hD1LeftBoundarie = detectorSize;
-  const hD1RightBoundarie = WIDTH / 2 - detectorSize * 2;
-
-  const hD2LeftBoundarie = WIDTH / 2 + detectorSize;
-  const hD2RightBoundarie = WIDTH - detectorSize - hD2LeftBoundarie;
-
-  const vD1TopBoundarie = detectorSize;
-  const vD1BottomBoundarie = HEIGHT / 2 - detectorSize * 2;
-
-  const vD2TopBoundarie = HEIGHT / 2 + detectorSize;
-  const vD2BottomBoundarie = HEIGHT - detectorSize - vD2TopBoundarie;
-
-  hD1Velocity = utils.calcVelocity(
-    hDetector1X,
-    detectorSize,
-    hD1LeftBoundarie,
-    hD1RightBoundarie,
-    hD1Velocity,
+  // Updating detector velocity
+  hd1.velocity = utils.calcVelocity(
+    hd1.detectorX,
+    utils.dSize,
+    hd1.leftBoundarie,
+    hd1.rightBoundarie,
+    hd1.velocity,
   );
 
-  hDetector1X += hD1Velocity;
+  hd1.detectorX = utils.calcDetectorPosition(hd1.detectorX, hd1.velocity);
 
-  hD2Velocity = utils.calcVelocity(
-    hDetector2X,
-    detectorSize,
-    hD2LeftBoundarie,
-    hD2RightBoundarie,
-    hD2Velocity,
+  hd2.velocity = utils.calcVelocity(
+    hd2.detectorX,
+    utils.dSize,
+    hd2.leftBoundarie,
+    hd2.rightBoundarie,
+    hd2.velocity,
   );
 
-  hDetector2X += hD2Velocity;
+  hd2.detectorX = utils.calcDetectorPosition(hd2.detectorX, hd2.velocity);
 
-  vD1Velocity = utils.calcVelocity(
-    vDetector1Y,
-    detectorSize,
-    vD1TopBoundarie,
-    vD1BottomBoundarie,
-    vD1Velocity,
+  vd1.velocity = utils.calcVelocity(
+    vd1.detectorY,
+    utils.dSize,
+    vd1.topBoundarie,
+    vd1.bottomBoundarie,
+    vd1.velocity,
   );
 
-  vDetector1Y += vD1Velocity;
+  vd1.detectorY = utils.calcDetectorPosition(vd1.detectorY, vd1.velocity);
 
-  vD2Velocity = utils.calcVelocity(
-    vDetector2Y,
-    detectorSize,
-    vD2TopBoundarie,
-    vD2BottomBoundarie,
-    vD2Velocity,
+  vd2.velocity = utils.calcVelocity(
+    vd2.detectorY,
+    utils.dSize,
+    vd2.topBoundarie,
+    vd2.bottomBoundarie,
+    vd2.velocity,
   );
 
-  vDetector2Y += vD2Velocity;
+  vd2.detectorY = utils.calcDetectorPosition(vd2.detectorY, vd2.velocity);
+
+  // Determining the color of Detector
+  hd1.color = utils.getDetectorColor(
+    hd1.detectorX,
+    utils.dSize,
+    p.hP1X,
+    p.hP1Width,
+    p.hP2X,
+    p.hP2Width,
+  );
+
+  hd2.color = utils.getDetectorColor(
+    hd2.detectorX,
+    utils.dSize,
+    p.hP1X,
+    p.hP1Width,
+    p.hP2X,
+    p.hP2Width,
+  );
+
+  vd1.color = utils.getDetectorColor(
+    vd1.detectorY,
+    utils.dSize,
+    p.vP1Y,
+    p.vP1Height,
+    p.vP2Y,
+    p.vP2Height,
+  );
+
+  vd2.color = utils.getDetectorColor(
+    vd2.detectorY,
+    utils.dSize,
+    p.vP1Y,
+    p.vP1Height,
+    p.vP2Y,
+    p.vP2Height,
+  );
 }
 
 function drawRange(x, y, width, height, color) {
@@ -101,127 +118,75 @@ function draw() {
 
   // Common properties
   const hDetectorAndParticlePosY = 0;
-  const hDetectorAndParticleHeight = HEIGHT;
+  const hDetectorAndParticleHeight = sp.HEIGHT;
 
   const vDetectorAndParticlePosX = 0;
-  const vDetectorAndParticleWidth = WIDTH;
-
-  // Particle-related properties
-  const hP1X = WIDTH / 3;
-  const hP1Width = 200;
-
-  const hP2X = WIDTH * (2 / 3);
-  const hP2Width = 20;
-
-  const vP1Y = HEIGHT / 3;
-  const vP1Height = 30;
-
-  const vP2Y = vP1Y + 140;
-  const vP2Height = 150;
-
-  const pColor = r.SKYBLUE;
-
-  // Detector-related properties
-  const hD1Color = utils.getDetectorColor(
-    hDetector1X,
-    detectorSize,
-    hP1X,
-    hP1Width,
-    hP2X,
-    hP2Width,
-  );
-
-  const hD2Color = utils.getDetectorColor(
-    hDetector2X,
-    detectorSize,
-    hP1X,
-    hP1Width,
-    hP2X,
-    hP2Width,
-  );
-
-  const vD1Color = utils.getDetectorColor(
-    vDetector1Y,
-    detectorSize,
-    vP1Y,
-    vP1Height,
-    vP2Y,
-    vP2Height,
-  );
-
-  const vD2Color = utils.getDetectorColor(
-    vDetector2Y,
-    detectorSize,
-    vP1Y,
-    vP1Height,
-    vP2Y,
-    vP2Height,
-  );
+  const vDetectorAndParticleWidth = sp.WIDTH;
 
   // Particle Fields
   drawParticle(
-    hP1X,
+    p.hP1X,
     hDetectorAndParticlePosY,
-    hP1Width,
+    p.hP1Width,
     hDetectorAndParticleHeight,
-    pColor,
+    p.pColor,
   );
 
   drawParticle(
-    hP2X,
+    p.hP2X,
     hDetectorAndParticlePosY,
-    hP2Width,
+    p.hP2Width,
     hDetectorAndParticleHeight,
-    pColor,
+    p.pColor,
   );
 
   drawParticle(
     vDetectorAndParticlePosX,
-    vP1Y,
+    p.vP1Y,
     vDetectorAndParticleWidth,
-    vP1Height,
-    pColor,
+    p.vP1Height,
+    p.pColor,
   );
 
   drawParticle(
     vDetectorAndParticlePosX,
-    vP2Y,
+    p.vP2Y,
     vDetectorAndParticleWidth,
-    vP2Height,
-    pColor,
+    p.vP2Height,
+    p.pColor,
   );
 
   // Particle Detectors
   drawDetector(
-    hDetector1X,
+    hd1.detectorX,
     hDetectorAndParticlePosY,
-    detectorSize,
+    utils.dSize,
     hDetectorAndParticleHeight,
-    hD1Color,
+    hd1.color,
   );
 
   drawDetector(
-    hDetector2X,
+    hd2.detectorX,
     hDetectorAndParticlePosY,
-    detectorSize,
+    utils.dSize,
     hDetectorAndParticleHeight,
-    hD2Color,
+    hd2.color,
   );
 
   drawDetector(
     vDetectorAndParticlePosX,
-    vDetector1Y,
+    vd1.detectorY,
     vDetectorAndParticleWidth,
-    detectorSize,
-    vD1Color,
+    utils.dSize,
+    vd1.color,
   );
 
   drawDetector(
     vDetectorAndParticlePosX,
-    vDetector2Y,
+    vd2.detectorY,
     vDetectorAndParticleWidth,
-    detectorSize,
-    vD2Color,
+    utils.dSize,
+    vd2.color,
   );
 
   r.EndDrawing();

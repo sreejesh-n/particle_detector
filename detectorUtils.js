@@ -1,6 +1,8 @@
 const r = require("raylib");
 const geometry = require("./geometry");
 
+const dSize = 70;
+
 function calcVelocity(
   detectorPos,
   detectorSize,
@@ -16,6 +18,10 @@ function calcVelocity(
   );
 
   return isInsideScreen ? velocity : -velocity;
+}
+
+function calcDetectorPosition(position, velocity) {
+  return position + velocity;
 }
 
 function getDetectorColor(
@@ -48,6 +54,8 @@ function getDetectorColor(
 }
 
 module.exports = {
+  dSize,
   calcVelocity,
+  calcDetectorPosition,
   getDetectorColor,
 };

@@ -1,21 +1,9 @@
 const r = require("raylib");
 const geometry = require("./geometry");
 
-const dSize = 70;
-
-function calcVelocity(
-  detectorPos,
-  detectorSize,
-  screenStart,
-  screenEnd,
-  velocity,
-) {
-  const isInsideScreen = geometry.isOverlapping(
-    detectorPos,
-    detectorSize,
-    screenStart,
-    screenEnd,
-  );
+function calcVelocity(detectorPos, detectorSize, start, end, velocity) {
+  const isInsideScreen =
+    detectorPos >= start && detectorPos + detectorSize <= end;
 
   return isInsideScreen ? velocity : -velocity;
 }
@@ -25,7 +13,7 @@ function calcDetectorPosition(position, velocity) {
 }
 
 function getDetectorColor(
-  detectorPosition,
+  detectorPos,
   detectorSize,
   particle1Pos,
   particle1Size,
@@ -33,29 +21,46 @@ function getDetectorColor(
   particle2Size,
 ) {
   const isP1Overlapping = geometry.isOverlapping(
-    detectorPosition,
+    detectorPos,
     detectorSize,
     particle1Pos,
     particle1Size,
   );
   const isP2Overlapping = geometry.isOverlapping(
-    detectorPosition,
+    detectorPos,
     detectorSize,
     particle2Pos,
     particle2Size,
   );
 
-  const detectorColor =
-    isP1Overlapping || isP2Overlapping
-      ? r.ColorAlpha(r.RED, 0.6)
-      : r.ColorAlpha(r.GREEN, 0.4);
+  const detectorColor = isP1Overlapping || isP2Overlapping ? r.RED : r.WHITE;
 
   return detectorColor;
 }
 
+function createDetector(size, start, end, velocity, orientation, screenSize) {
+  const pos = start;
+
+  return {
+    pos,
+    size,
+    start,
+    end,
+    velocity,
+    orientation,
+    screenSize,
+  };
+}
+
+function updateDetector(d, p1, p2) {
+  d.velocity = calcVelocity(d.pos, d.size, d.start, d.end, d.velocity);
+  d.pos = calcDetectorPosition(d.pos, d.velocity);
+  d.color = getDetectorColor(d.pos, d.size, p1.pos, p1.size, p2.pos, p2.size);
+
+  return d;
+}
+
 module.exports = {
-  dSize,
-  calcVelocity,
-  calcDetectorPosition,
-  getDetectorColor,
+  createDetector,
+  updateDetector,
 };
